@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <string>
+#include <sstream>
+#include <algorithm> // Required for std::remove
+
+using namespace std;
+
+int main() {
+    int n, q;
+    if (!(cin >> n >> q)) return 0;
+    cin.ignore(); // Consume the newline after n and q
+
+    map<string, string> hrml_map;
+    vector<string> tag_stack;
+
+    for (int i = 0; i < n; i++) {
+        string line;
+        getline(cin, line);
+
+        if (line.substr(0, 2) == "</") {
+            // Closing tag: pop from the hierarchy
+            if (!tag_stack.empty()) tag_stack.pop_back();
+        } else {
+            // Opening tag: remove syntax characters for easier parsing
+            line.erase(remove(line.begin(), line.end(), '<'), line.end());
+            line.erase(remove(line.begin(), line.end(), '>'), line.end());
+            line.erase(remove(line.begin(), line.end(), '\"'), line.end());
+
+            stringstream ss(line);
+            string tag_name;
+            ss >> tag_name;
+            tag_stack.push_back(tag_name);
+
+            // Build current hierarchical path (e.g., tag1.tag2)
+            string current_path = "";
+            for (size_t j = 0; j < tag_stack.size(); j++) {
+                current_path += (j == 0 ? "" : ".") + tag_stack[j];
+            }
+
+            // Parse attributes: name = value
+            string attr_name, eq, attr_value;
+            while (ss >> attr_name >> eq >> attr_value) {
+                hrml_map[current_path + "~" + attr_name] = attr_value;
+            }
+        }
+    }
+
+    // Process queries directly against the map
+    for (int i = 0; i < q; i++) {
+        string query;
+        getline(cin, query);
+        if (hrml_map.count(query)) {
+            cout << hrml_map[query] << endl;
+        } else {
+            cout << "Not Found!" << endl;
+        }
+    }
+
+    return 0;
+}
