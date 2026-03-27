@@ -1,0 +1,25 @@
+class Rectangle {
+protected:
+    int width;
+    int height;
+
+public:
+    // Prints width and height separated by a space
+    void display() {
+        cout << width << " " << height << endl;
+    }
+};
+
+class RectangleArea : public Rectangle {
+public:
+    // Reads width and height from standard input
+    void read_input() {
+        cin >> width >> height;
+    }
+
+    // Overloads/Overrides display to print the calculated area
+    void display() {
+        cout << (width * height) << endl;
+    }
+};
+
