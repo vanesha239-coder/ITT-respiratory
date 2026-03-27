@@ -1,0 +1,15 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    int a, b, c;
+    // Read 3 space-separated numbers from stdin
+    if (cin >> a >> b >> c) {
+        // Print their sum to stdout
+        cout << a + b + c << endl;
+    }
+    return 0;
+}
+
+
