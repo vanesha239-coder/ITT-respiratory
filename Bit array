@@ -1,0 +1,42 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    long long N, S, P, Q;
+    if (!(cin >> N >> S >> P >> Q)) return 0;
+
+    // We use long long to prevent overflow during (a * P + Q) 
+    // before the modulo 2^31 is applied.
+    long long MOD = 1LL << 31;
+    
+    long long current = S % MOD;
+long long prev = current;
+    int count = 1;
+
+    for (int i = 1; i < N; ++i) {
+        current = (prev * P + Q) % MOD;
+        
+        // If the sequence becomes constant or cycles back to a previous state, 
+        // we stop. In this specific LCG, if current == prev, it will never change.
+        if (current == prev) {
+            break;
+        }
+        
+        prev = current;
+        count++;
+    }
+
+    cout << count << endl;
+
+
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    return 0;
+}
